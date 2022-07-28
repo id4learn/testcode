@@ -1,0 +1,14 @@
+
+# git setup steps
+1. install git locally
+2. configure git with name and email
+3. create ssh key & update on github
+https://docs.github.com/en/authentication/connecting-to-github-with-ssh/adding-a-new-ssh-key-to-your-github-account
+
+4. create clone on git
+5. clone repository
+6. add file locally and commit
+
+
+git clone --recurse-submodules git@github.com:id4learn/testcode.git
+git push -u origin main 
