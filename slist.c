@@ -39,6 +39,7 @@ uint32_t slist_delete_tail_node(slist_t *slist);
 uint32_t slist_display_all(slist_t *slist);
 uint32_t slist_find_and_delete_node(slist_t *slist, uint32_t id);
 uint32_t slist_delete_all_node(slist_t *slist);
+uint32_t slist_reverse(slist_t *slist);
 snode_t* allocate_slist_node();
 
 slist_t* create_slist();
@@ -85,6 +86,7 @@ uint32_t  slist_test_api(task_inst_t *inst)
     printf("\n 8 Add 10 nodes at tail");
     printf("\n 9  Delete complete list");
     printf("\n 10  Delete all nodes & exit ");
+    printf("\n 11 Reverse list elements ");
     
     printf("\n Enter your choice now:");
     scanf("%u",&choice);
@@ -122,6 +124,9 @@ uint32_t  slist_test_api(task_inst_t *inst)
       case 10: // delete n exit
         slist_delete_all_node(slist);
         return STATUS_SUCCESS;
+      case 11:
+        slist_reverse(slist);
+        break;
     } /* switch */
   }/* while */
 
@@ -200,6 +205,8 @@ uint32_t slist_delete_tail_node(slist_t *slist)
 
       if(tmp->next != slist->tail) {
         tmp = tmp->next;
+        printf("\\n Deleted Node with id =%u",tmp->id);
+        free(tmp);
       }
       else {
         printf("\n Deleted Node with id =%u",slist->tail->id);
@@ -416,4 +423,41 @@ uint32_t slist_delete_all_node(slist_t *slist)
 
   return STATUS_FAILURE;
 }
+
+uint32_t slist_reverse(slist_t *slist)
+{
+  uint32_t status = STATUS_FAILURE;
+  snode_t *prev = NULL;
+  snode_t *curr = NULL;
+  snode_t *next = NULL;
+
+  if(slist == NULL || slist->head == NULL || slist->tail == NULL) {
+    printf("\n List is empty , nothing to reverse");
+  }
+
+  if(slist-> head == slist->tail) {
+    printf("\n noting to be done for reversal as only single element exist");
+    return STATUS_SUCCESS;
+  }
+  slist->tail = slist->head;
+
+  curr = slist->head;
+
+  while(curr != NULL) {
+
+    next = curr->next;
+    curr->next = prev;
+    prev = curr;
+
+    curr = next;
+  }
+  slist->head = prev;
+
+  printf("\n Reversed list content ......");
+  slist_display_all(slist);
+
+  return STATUS_SUCCESS;
+
+}
+
 
