@@ -1,0 +1,11 @@
+
+docker version
+
+docker ps
+
+# 8800 & 8801 public port , 80 is internal port of container
+docker run -d -p 8800:80 httpd
+docker run -d -p 8801:80 httpd
+
+curl localhost:8800
+curl localhost:8801
