@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdint.h>
 #include <array>
+#include<string.h>
 
 
 void one(int a, int b)
@@ -46,6 +47,7 @@ typedef struct {
 
 struct NsMsgIeTableS;
 
+
 uint32_t parse1(NsEncDec *info, NsMsgIeTableS *ieTbl);
 uint32_t parse2(NsEncDec *info, NsMsgIeTableS *ieTbl);
 
@@ -61,19 +63,26 @@ typedef struct NsMsgIeTableS
     size_t            offsetVal;
     NsEncDecFn        encFn[1];
     NsEncDecFn        decFn[1];
-} NsMsgIeTable;
+} NsMsgIeTableT;
 
+typedef struct task_inst_s {
+  NsMsgIeTableT  table;
+}task_inst_t;
+
+task_inst_t* init_encode_decode_table();
 
 #define MAX_STATE 0x10
 #define MAX_EVT   0x10
 
 
-std::array<NsMsgIeTable, 3> ns_reset_table =  {{ {1, 2, 3, 4 , 0x30000, &parse1 , &parse2} ,
+std::array<NsMsgIeTableT, 3> ns_reset_table =  {{ {1, 2, 3, 4 , 0x30000, &parse1 , &parse2} ,
                                                 {6, 7, 34, 64 , 0x40000, &parse1 , &parse2} 
                                               }};
+uint32_t print_sizeof_array();
 
 int main()
 {
+  task_inst_t *inst = NULL;
 
   NsEncDec  msg;
   uint32_t result = 0;
@@ -111,6 +120,10 @@ int main()
       }
     }
 
+    print_sizeof_array();
+
+    inst = init_encode_decode_table();
+
     return 0;
 }
 uint32_t parse1(NsEncDec *info, NsMsgIeTableS *ieTbl)
@@ -124,6 +137,42 @@ uint32_t parse2(NsEncDec *info, NsMsgIeTableS *ieTbl)
 {
   printf("\n parse2 function call");
   return 1;
+
+}
+
+/*
+typedef struct NsMsgIeTableS 
+{
+    uint32_t          tag;
+    uint32_t          ieFormat;
+    uint32_t          iePresence;
+    uint32_t          ieLen;       // For fixed length IEs, length in bits
+    size_t            offsetVal;
+    NsEncDecFn        encFn[1];
+    NsEncDecFn        decFn[1];
+} NsMsgIeTable;
+
+*/
+
+
+task_inst_t* init_encode_decode_table()
+{
+  task_inst_t *inst = (task_inst_t*)malloc(sizeof(task_inst_t));
+  memset((void *)inst, 0 , sizeof(inst));
+
+  inst->table = (NsMsgIeTableT){10,20,1,2,20000 , parse1, parse2};
+
+  return inst;
+
+}
+
+
+uint32_t print_sizeof_array()
+{
+  uint32_t  arr[20];
+
+  printf("\n length of arr = %lu & size = %lu", sizeof(arr)/sizeof(uint32_t), sizeof(arr));
+
 
 }
 

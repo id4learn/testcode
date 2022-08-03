@@ -11,11 +11,17 @@
 #define UPPER_RANDOM_ID 0x20
 #define LOWER_RANDOM_ID 0x05
 
+#define MAX_ELE_STACK   0x96
 
 typedef struct snode_s{
   uint32_t  id;
   struct snode_s  *next;
 }snode_t;
+
+typedef struct stack_s{
+  uint32_t   store[MAX_ELE_STACK];
+  int16_t    top;
+}stack_t;
 
 typedef struct slist_s{
   snode_t   *head; // head of singly link list
@@ -23,12 +29,16 @@ typedef struct slist_s{
   uint32_t  total;
 }slist_t;
 
+
+
 typedef struct task_inst_s{
   slist_t   *slist;
+  stack_t   *stack;
 }task_inst_t;
 
 
 /* function declaration */
+
 
 uint32_t slist_add_node_at_head( slist_t *slist);
 uint32_t slist_add_n_node_at_head(slist_t *slist, uint32_t n);
@@ -47,6 +57,15 @@ task_inst_t* create_task_inst();
 uint32_t  slist_test_api(task_inst_t *inst);
 
 
+/* stack */
+uint32_t insert_stack_entry(stack_t *stack);
+uint32_t pop_stack_entry(stack_t *stack , uint32_t *poped_val);
+uint32_t  display_stack(stack_t *stack);
+uint32_t insert_n_entry_into_stack(stack_t *stack, uint32_t n);
+uint32_t  delete_stack_inst_n_exit(task_inst_t *inst);
+stack_t*  create_stack_inst(task_inst_t *inst);
+uint32_t  test_stack_api(task_inst_t *inst);
+
 uint32_t main()
 {
   task_inst_t   *inst = NULL;
@@ -58,6 +77,9 @@ uint32_t main()
     // memory alloc failed
     return STATUS_FAILURE;
   }
+
+  status = test_stack_api(inst);
+
   status =  slist_test_api(inst);
 
   return status;
@@ -460,4 +482,168 @@ uint32_t slist_reverse(slist_t *slist)
 
 }
 
+
+stack_t*  create_stack_inst(task_inst_t *inst)
+{
+
+  stack_t   *stack  = NULL;
+
+  if(inst == NULL) 
+    return STATUS_FAILURE;
+
+  stack = (stack_t *) malloc(sizeof(stack_t));
+
+  if(stack == NULL)  {
+    printf("\n Malloc failed for stack creation ");
+    return NULL;
+  }
+
+  memset((void *)stack, 0 , sizeof(stack_t));
+  stack->top = -1;
+
+  return stack;
+}
+
+uint32_t  delete_stack_inst_n_exit(task_inst_t *inst)
+{
+  stack_t *stack = NULL;
+
+  if(inst == NULL) 
+    return STATUS_SUCCESS;
+
+
+  if(inst->stack != NULL) {
+    free (inst->stack);
+    inst->stack = NULL;
+    printf("\n Stack instance freed");
+  }
+
+  return STATUS_SUCCESS;
+
+}
+
+
+uint32_t insert_n_entry_into_stack(stack_t *stack, uint32_t n)
+{
+  uint32_t status = STATUS_FAILURE;
+
+  for( uint32_t i = 0 ; i < n ; i++) {
+    status = insert_stack_entry(stack);
+    if(status == STATUS_FAILURE) {
+      return STATUS_FAILURE;
+    }
+  }
+  return STATUS_SUCCESS;
+}
+
+
+uint32_t insert_stack_entry(stack_t *stack)
+{
+  uint32_t  value = 0;
+
+  if(stack == NULL) {
+    printf("\n Stack ptr is NULL, Please allocate ");
+    return STATUS_FAILURE;
+  }
+
+  if( stack->top >= MAX_ELE_STACK) {
+    printf("\n Stack is full");
+    return STATUS_FAILURE;
+  }
+
+  value = (rand()% (UPPER_RANDOM_ID - LOWER_RANDOM_ID +1)) + LOWER_RANDOM_ID;
+  printf("\n Random number generated = %u", value);
+
+  stack->store[++(stack->top)] = value;
+
+  return STATUS_SUCCESS;
+}
+
+uint32_t pop_stack_entry(stack_t *stack , uint32_t *poped_val)
+{
+
+  if(stack == NULL || stack->top < 0  ) {
+    printf("\n Stack is empty");
+    return STATUS_FAILURE;
+  }
+  else {
+    *poped_val = stack->store[stack->top--];
+
+    printf("\n Popped value [%u] from stack", *poped_val);
+  }
+
+  return STATUS_SUCCESS;
+
+}
+
+uint32_t  display_stack(stack_t *stack)
+{
+  int16_t i = 0;
+  if(stack == NULL || stack->top < 0) {
+    return STATUS_FAILURE;
+  }
+
+  printf("\n [ Stack Entries: ");
+  for (i = stack->top ; i >=0 ;  i--) {
+    printf("\t [%u]",stack->store[i]); 
+  }
+  printf("\t ]");
+
+  return STATUS_SUCCESS;
+
+}
+
+uint32_t  test_stack_api(task_inst_t *inst)
+{
+  uint32_t  choice = 0;
+  uint32_t  delete_id = 0;
+  uint32_t value = 0;
+  uint32_t  status = STATUS_FAILURE;
+  stack_t *stack = create_stack_inst(inst);
+  if(stack == NULL) {
+    // memory alloc failed
+    return STATUS_FAILURE;
+  }
+
+  inst->stack = stack;
+
+  while(1) {
+    printf("\n 1 Add entry into stack");
+    printf("\n 2 pop entry from stack");
+    printf("\n 3 Display content of stack ");
+    printf("\n 4 Add 10 nodes stack");
+    printf("\n 5 pop 10 nodes from stack");
+    printf("\n 6 Delete stack ");
+    
+    printf("\n Enter your choice now:");
+    scanf("%u",&choice);
+
+    switch(choice){
+      case 1:
+        insert_stack_entry(stack);
+        break;
+      case 2:
+        status = pop_stack_entry(stack, &value);
+        if(status == STATUS_SUCCESS) {
+          printf("\n Popped value:[%u]",value);
+        }
+        break;
+      case 3:
+        display_stack(stack);
+        break;
+      case 4:
+        insert_n_entry_into_stack(stack, 10);
+        break;
+        /*
+      case 5:
+        pop_n_entry(stack);
+        break; */
+      case 6:
+        delete_stack_inst_n_exit(inst);
+        return STATUS_SUCCESS;
+    } /* switch */
+  }/* while */
+
+  return STATUS_SUCCESS;
+}
 
