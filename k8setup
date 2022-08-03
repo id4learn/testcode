@@ -1,0 +1,144 @@
+
+    
+
+// how to install ubuntu in virtual box
+https://www.youtube.com/watch?v=QbmRXJJKsvs
+
+
+// download ubuntu
+https://releases.ubuntu.com/18.04.5/?_ga=2.244502341.1569932608.1623496434-1437690909.1622660278
+
+
+
+
+// Steps to create a cluster
+https://www.youtube.com/watch?v=0UpClq5MOxA
+
+
+sudo apt install net-tools
+
+
+
+
+https://docs.docker.com/engine/install/ubuntu/
+
+
+
+sudo apt-get remove docker docker-engine docker.io containerd runc
+
+
+sudo apt-get update
+
+
+sudo apt-get install \
+    apt-transport-https \
+    ca-certificates \
+    curl \
+    gnupg \
+    lsb-release
+    
+    
+sudo apt install openssh-server
+
+
+curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /usr/share/keyrings/docker-archive-keyring.gpg
+
+
+
+echo \
+  "deb [arch=amd64 signed-by=/usr/share/keyrings/docker-archive-keyring.gpg] https://download.docker.com/linux/ubuntu \
+  $(lsb_release -cs) stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
+  
+sudo apt-get update
+
+
+sudo apt-get install docker-ce docker-ce-cli containerd.io
+
+
+
+
+https://kubernetes.io/docs/setup/production-environment/tools/kubeadm/install-kubeadm/
+
+
+
+sudo apt-get update
+sudo apt-get install -y apt-transport-https ca-certificates curl
+
+
+sudo curl -fsSLo /usr/share/keyrings/kubernetes-archive-keyring.gpg https://packages.cloud.google.com/apt/doc/apt-key.gpg
+
+
+echo "deb [signed-by=/usr/share/keyrings/kubernetes-archive-keyring.gpg] https://apt.kubernetes.io/ kubernetes-xenial main" | sudo tee /etc/apt/sources.list.d/kubernetes.list
+
+
+sudo apt-get update
+sudo apt-get install -y kubelet kubeadm kubectl
+sudo apt-mark hold kubelet kubeadm kubectl
+
+
+
+
+cat <<EOF | sudo tee /etc/modules-load.d/k8s.conf
+br_netfilter
+EOF
+
+
+cat <<EOF | sudo tee /etc/sysctl.d/k8s.conf
+net.bridge.bridge-nf-call-ip6tables = 1
+net.bridge.bridge-nf-call-iptables = 1
+EOF
+sudo sysctl --system
+
+
+
+
+https://kubernetes.io/docs/setup/production-environment/tools/kubeadm/create-cluster-kubeadm/
+
+
+https://v1-17.docs.kubernetes.io/docs/setup/production-environment/tools/kubeadm/create-cluster-kubeadm/
+
+
+
+On the master:
+sudo kubeadm init --pod-network-cidr=10.244.0.0/16
+
+
+
+kubectl apply -f https://raw.githubusercontent.com/coreos/flannel/2140ac876ef134e0ed5af15c65e414cf26827915/Documentation/kube-flannel.yml
+
+
+
+
+****************************
+If you get "connection to localhost was refused"
+
+
+mkdir -p $HOME/.kube
+sudo cp -i /etc/kubernetes/admin/conf $HOME/.kube/config
+sudo chown $(id -u):$(id -g) $HOME/.kube/config
+
+
+
+***********************************************
+If you get "pod evicted due to disk pressure"
+
+
+https://stackoverflow.com/questions/54155534/kubernetes-eviction-manager-evicting-control-plane-pods-to-reclaim-ephemeral-sto
+
+
+so I see my config file for kubelet is /var/lib/kubelet/config.yaml
+
+
+Opening that I changed evitionHard settings to be (I think they were 10 or 15% before):
+
+
+...
+evictionHard:
+  imagefs.available: 1%
+  memory.available: 100Mi
+  nodefs.available: 1%
+  nodefs.inodesFree: 1%
+...
+
+
+***********************************************
