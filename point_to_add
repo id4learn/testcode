@@ -1,0 +1,59 @@
+
+Awards & Certification
+leadership and management
+CAP award 
+Feather in cap award
+Misc awards
+Kubernetes
+Kafka
+Redis
+
+Patents
+-
+
+Technical
+- Load balancer ( gtp load balancer , bssgp/ns load balancer, sctp load balancer etc)
+- High availability ( checkpointing, micro-checkpointing, auditing)
+- Scaling in monolithic environment
+- Scaling of stateful application in cloud and monolithic
+- Quality
+- Performance
+- Quality of service based on 2rate 3 colour algo
+- Subscriber session management procedure
+- High TPS system
+- Distributed application 100s instance 
+- Consitent hashing
+- Rest Interface with supoprt to auto syncing of client/server data in case of failure conditions
+- Highly scalable Rest interface
+-TLS
+- Geographical redundancy
+- service discoery in cloud
+- Database assited HA
+- Control plane flow installtion triger to data-path for high performance datapath at line rate
+- TR69 interface to manage 100s/1000s device remotely
+
+Expertise
+- Built load balancer
+- Subscriber high availability ( local redundancy , geographical redundancy)
+- TLV protocol stack 
+- Multi layerd FSM with high quality
+- Replace third party code multiple times
+- GPRS service support on platform
+
+Management
+- Built high performance team
+- Taken initiative root out issus pending for years
+- Built collaborative team
+- Automation initiative -dev test cases
+- Auto config loading
+- Made 1000s bug redundant
+
+
+C/C++
+Python
+protocols
+protbuf
+grpc
+kafka
+rest/http1.1
+tcp/udp/ip
