@@ -1,6 +1,7 @@
+#docker commands
+https://docs.docker.com/engine/reference/commandline/commit/
 
 docker version
-
 docker ps
 
 # 8800 & 8801 public port , 80 is internal port of container
