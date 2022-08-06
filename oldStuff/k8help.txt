@@ -1,1 +1,14 @@
 
+apiVersion: v1
+kind: Pod
+metadata: 
+	name: podName
+	labels:
+		apps: f1apDemuxlbl
+		type: demux
+
+
+spec:
+	containers:
+		- name : nginx-container
+		  image: nginx
