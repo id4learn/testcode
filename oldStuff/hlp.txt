@@ -12,3 +12,15 @@ https://docs.github.com/en/authentication/connecting-to-github-with-ssh/adding-a
 
 git clone --recurse-submodules git@github.com:id4learn/testcode.git
 git push -u origin main 
+
+
+# ubuntu setup for display/vboxguest-addition - post installtion steps
+
+1. update 
+2. install make gcc perl net-tools openssh-server
+3. click on devices/insert VboxGuestAddiotion.iso
+4. cd /media/<usename>/VBox**
+5. sudo ./VboxLi* 
+6. restart
+7. resize the screen to 1920* 1080 pixel 
+
