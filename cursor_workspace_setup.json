@@ -1,0 +1,26 @@
+{
+    "files.associations": {
+        "*.c": "c",
+        "*.py": "python",
+        "Makefile": "makefile"
+    },
+    "python.defaultInterpreterPath": "/usr/bin/python3",
+    "python.linting.enabled": true,
+    "python.linting.pylintEnabled": true,
+    "python.formatting.provider": "black",
+    "c_cpp.default.compilerPath": "/usr/bin/gcc",
+    "c_cpp.default.cStandard": "c99",
+    "c_cpp.default.intelliSenseMode": "linux-gcc-x64",
+    "terminal.integrated.defaultProfile.linux": "bash",
+    "editor.tabSize": 4,
+    "editor.insertSpaces": true,
+    "files.exclude": {
+        "**/*.o": true,
+        "**/gre_tunnel": true
+    },
+    "recommendations": [
+        "ms-python.python",
+        "ms-vscode.cpptools",
+        "ms-vscode.makefile-tools"
+    ]
+}
